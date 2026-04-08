@@ -12,3 +12,8 @@ airflow/logs/
 airflow/plugins/
 data/
 config/
+
+airflow/logs/
+airflow/plugins/
+data/
+config/
