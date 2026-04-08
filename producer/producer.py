@@ -130,26 +130,52 @@ def inject_error(event: dict) -> dict:
 
 
 def create_kafka_producer(max_retries: int = 15) -> KafkaProducer:
-    """Create Kafka producer with retry logic (Kafka takes ~30s to be ready)."""
+    """Create Kafka producer with retry logic — supports both local Kafka and Azure Event Hubs."""
+    
+    # Check if we're connecting to Azure Event Hubs (has connection string)
+    connection_string = os.getenv('KAFKA_CONNECTION_STRING', '')
+    bootstrap_servers = os.getenv('KAFKA_BOOTSTRAP_SERVERS', 'localhost:9092')
+    
+    if connection_string:
+        # Azure Event Hubs — requires SASL/SSL
+        logger.info("Connecting to Azure Event Hubs...")
+        producer_config = {
+            'bootstrap_servers': bootstrap_servers,
+            'security_protocol': 'SASL_SSL',
+            'sasl_mechanism': 'PLAIN',
+            'sasl_plain_username': '$ConnectionString',
+            'sasl_plain_password': connection_string,
+            'value_serializer': lambda v: json.dumps(v).encode('utf-8'),
+            'key_serializer': lambda k: k.encode('utf-8') if k else None,
+            'acks': 'all',
+            'retries': 3,
+            'batch_size': 16384,
+            'linger_ms': 5,
+        }
+    else:
+        # Local Kafka (Docker)
+        logger.info("Connecting to local Kafka...")
+        producer_config = {
+            'bootstrap_servers': bootstrap_servers.split(','),
+            'value_serializer': lambda v: json.dumps(v).encode('utf-8'),
+            'key_serializer': lambda k: k.encode('utf-8') if k else None,
+            'acks': 'all',
+            'retries': 3,
+            'batch_size': 16384,
+            'linger_ms': 5,
+            'compression_type': 'gzip',
+        }
+
     for attempt in range(1, max_retries + 1):
         try:
-            producer = KafkaProducer(
-                bootstrap_servers=KAFKA_BOOTSTRAP_SERVERS.split(','),
-                value_serializer=lambda v: json.dumps(v).encode('utf-8'),
-                key_serializer=lambda k: k.encode('utf-8') if k else None,
-                acks='all',               # wait for broker acknowledgment
-                retries=3,
-                batch_size=16384,         # 16KB batch
-                linger_ms=5,              # wait 5ms to fill batch
-                compression_type='gzip',  # compress before sending
-            )
-            logger.info(f"✅ Connected to Kafka at {KAFKA_BOOTSTRAP_SERVERS}")
+            producer = KafkaProducer(**producer_config)
+            logger.info(f"Connected to Kafka at {bootstrap_servers}")
             return producer
         except NoBrokersAvailable:
             logger.warning(f"Kafka not ready. Attempt {attempt}/{max_retries}. Waiting 10s...")
             time.sleep(10)
 
-    raise RuntimeError("❌ Could not connect to Kafka after max retries")
+    raise RuntimeError("Could not connect to Kafka after max retries")
 
 
 def main():
