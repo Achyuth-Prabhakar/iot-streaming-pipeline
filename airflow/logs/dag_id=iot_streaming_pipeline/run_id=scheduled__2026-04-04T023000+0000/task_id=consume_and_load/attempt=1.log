@@ -1,0 +1,160 @@
+[2026-04-04T02:37:44.637+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: iot_streaming_pipeline.consume_and_load scheduled__2026-04-04T02:30:00+00:00 [queued]>
+[2026-04-04T02:37:44.745+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: iot_streaming_pipeline.consume_and_load scheduled__2026-04-04T02:30:00+00:00 [queued]>
+[2026-04-04T02:37:44.747+0000] {taskinstance.py:2170} INFO - Starting attempt 1 of 3
+[2026-04-04T02:37:44.802+0000] {taskinstance.py:2191} INFO - Executing <Task(PythonOperator): consume_and_load> on 2026-04-04 02:30:00+00:00
+[2026-04-04T02:37:44.820+0000] {standard_task_runner.py:60} INFO - Started process 2427 to run task
+[2026-04-04T02:37:44.848+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'iot_streaming_pipeline', 'consume_and_load', 'scheduled__2026-04-04T02:30:00+00:00', '--job-id', '90', '--raw', '--subdir', 'DAGS_FOLDER/iot_pipeline_dag.py', '--cfg-path', '/tmp/tmp4418y5wf']
+[2026-04-04T02:37:44.866+0000] {standard_task_runner.py:88} INFO - Job 90: Subtask consume_and_load
+[2026-04-04T02:37:45.289+0000] {task_command.py:423} INFO - Running <TaskInstance: iot_streaming_pipeline.consume_and_load scheduled__2026-04-04T02:30:00+00:00 [running]> on host e1f63ebd2327
+[2026-04-04T02:37:45.913+0000] {taskinstance.py:2480} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='achyuth' AIRFLOW_CTX_DAG_ID='iot_streaming_pipeline' AIRFLOW_CTX_TASK_ID='consume_and_load' AIRFLOW_CTX_EXECUTION_DATE='2026-04-04T02:30:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2026-04-04T02:30:00+00:00'
+[2026-04-04T02:38:14.710+0000] {connection.py:370} INFO - Snowflake Connector for Python Version: 3.6.0, Python Version: 3.11.8, Platform: Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.36
+[2026-04-04T02:38:14.732+0000] {connection.py:1171} INFO - This connection is in OCSP Fail Open Mode. TLS Certificates would be checked for validity and revocation status. Any other Certificate Revocation related exceptions or OCSP Responder failures would be disregarded in favor of connectivity.
+[2026-04-04T02:38:16.718+0000] {loader.py:50} INFO - ✅ Snowflake connection established
+[2026-04-04T02:38:16.774+0000] {cursor.py:1028} INFO - query: [SHOW TABLES IN SCHEMA IOT_PIPELINE_DB.RAW]
+[2026-04-04T02:38:17.029+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:17.046+0000] {cursor.py:1205} INFO - Number of results in first chunk: 3
+[2026-04-04T02:38:17.063+0000] {loader.py:74} INFO - ✅ All Snowflake tables verified: {'IOT_EVENTS_REJECTED', 'PIPELINE_METRICS', 'IOT_EVENTS'}
+[2026-04-04T02:38:17.078+0000] {conn.py:400} INFO - <BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:29092 <connecting> [IPv4 ('172.18.0.3', 29092)]>: connecting to kafka:29092 [('172.18.0.3', 29092) IPv4]
+[2026-04-04T02:38:17.165+0000] {conn.py:622} INFO - <BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:29092 <checking_api_versions_recv> [IPv4 ('172.18.0.3', 29092)]>: Broker version identified as 2.6
+[2026-04-04T02:38:17.186+0000] {conn.py:461} INFO - <BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:29092 <connected> [IPv4 ('172.18.0.3', 29092)]>: Connection complete.
+[2026-04-04T02:38:17.202+0000] {subscription_state.py:181} INFO - Updating subscribed topics to: ('iot-sensor-events',)
+[2026-04-04T02:38:17.251+0000] {iot_pipeline_dag.py:134} INFO - 🚀 Starting consume loop — batch_id: 76ea2988... | reading for 60s | max: 500 records
+[2026-04-04T02:38:17.279+0000] {conn.py:400} INFO - <BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:29092 <connecting> [IPv4 ('172.18.0.3', 29092)]>: connecting to kafka:29092 [('172.18.0.3', 29092) IPv4]
+[2026-04-04T02:38:17.282+0000] {conn.py:461} INFO - <BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:29092 <connected> [IPv4 ('172.18.0.3', 29092)]>: Connection complete.
+[2026-04-04T02:38:17.290+0000] {conn.py:951} INFO - <BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:29092 <connected> [IPv4 ('172.18.0.3', 29092)]>: Closing connection. 
+[2026-04-04T02:38:17.905+0000] {cluster.py:403} INFO - Coordinator for group/***-pipeline-group is ('coordinator-1', 'kafka', 29092, None)
+[2026-04-04T02:38:17.908+0000] {base.py:835} INFO - Discovered coordinator coordinator-1 for group ***-pipeline-group
+[2026-04-04T02:38:17.910+0000] {base.py:895} INFO - Starting new heartbeat thread
+[2026-04-04T02:38:17.914+0000] {consumer.py:379} INFO - Revoking previously assigned partitions () for group ***-pipeline-group
+[2026-04-04T02:38:17.916+0000] {base.py:433} INFO - Failed to join group ***-pipeline-group: NodeNotReadyError: coordinator-1
+[2026-04-04T02:38:17.926+0000] {conn.py:400} INFO - <BrokerConnection client_id=kafka-python-2.3.0, node_id=coordinator-1 host=kafka:29092 <connecting> [IPv4 ('172.18.0.3', 29092)]>: connecting to kafka:29092 [('172.18.0.3', 29092) IPv4]
+[2026-04-04T02:38:17.928+0000] {conn.py:461} INFO - <BrokerConnection client_id=kafka-python-2.3.0, node_id=coordinator-1 host=kafka:29092 <connected> [IPv4 ('172.18.0.3', 29092)]>: Connection complete.
+[2026-04-04T02:38:18.031+0000] {base.py:546} INFO - (Re-)joining group ***-pipeline-group
+[2026-04-04T02:38:18.327+0000] {base.py:661} INFO - Received member id kafka-python-2.3.0-6bec39f8-ed13-4b36-bd28-ac9b3601b331 for group ***-pipeline-group; will retry join-group
+[2026-04-04T02:38:18.328+0000] {base.py:433} INFO - Failed to join group ***-pipeline-group: [Error 79] MemberIdRequiredError
+[2026-04-04T02:38:18.330+0000] {base.py:546} INFO - (Re-)joining group ***-pipeline-group
+[2026-04-04T02:38:21.488+0000] {base.py:617} INFO - Successfully joined group ***-pipeline-group <Generation 17 (member_id: kafka-python-2.3.0-6bec39f8-ed13-4b36-bd28-ac9b3601b331, protocol: range)>
+[2026-04-04T02:38:21.492+0000] {base.py:619} INFO - Elected group leader -- performing partition assignments using range
+[2026-04-04T02:38:21.793+0000] {subscription_state.py:254} INFO - Updated partition assignment: [('iot-sensor-events', 0), ('iot-sensor-events', 1), ('iot-sensor-events', 2)]
+[2026-04-04T02:38:21.800+0000] {consumer.py:260} INFO - Setting newly assigned partitions (('iot-sensor-events', 0), ('iot-sensor-events', 1), ('iot-sensor-events', 2)) for group ***-pipeline-group
+[2026-04-04T02:38:22.475+0000] {cursor.py:1028} INFO - query: [INSERT INTO IOT_EVENTS ( EVENT_ID, MACHINE_ID, MACHINE_TYPE, EVENT_TIMESTAMP, AI...]
+[2026-04-04T02:38:24.456+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:24.459+0000] {cursor.py:1028} INFO - query: [COMMIT]
+[2026-04-04T02:38:24.570+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:24.571+0000] {cursor.py:1205} INFO - Number of results in first chunk: 1
+[2026-04-04T02:38:24.572+0000] {loader.py:130} INFO - ✅ Inserted 100 valid events (batch: 76ea2988...)
+[2026-04-04T02:38:24.665+0000] {cursor.py:1028} INFO - query: [INSERT INTO IOT_EVENTS ( EVENT_ID, MACHINE_ID, MACHINE_TYPE, EVENT_TIMESTAMP, AI...]
+[2026-04-04T02:38:27.292+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:27.294+0000] {cursor.py:1028} INFO - query: [COMMIT]
+[2026-04-04T02:38:27.371+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:27.375+0000] {cursor.py:1205} INFO - Number of results in first chunk: 1
+[2026-04-04T02:38:27.376+0000] {loader.py:130} INFO - ✅ Inserted 100 valid events (batch: 76ea2988...)
+[2026-04-04T02:38:27.585+0000] {cursor.py:1028} INFO - query: [INSERT INTO IOT_EVENTS ( EVENT_ID, MACHINE_ID, MACHINE_TYPE, EVENT_TIMESTAMP, AI...]
+[2026-04-04T02:38:28.163+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:28.168+0000] {cursor.py:1028} INFO - query: [COMMIT]
+[2026-04-04T02:38:28.272+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:28.284+0000] {cursor.py:1205} INFO - Number of results in first chunk: 1
+[2026-04-04T02:38:28.304+0000] {loader.py:130} INFO - ✅ Inserted 100 valid events (batch: 76ea2988...)
+[2026-04-04T02:38:28.548+0000] {cursor.py:1028} INFO - query: [INSERT INTO IOT_EVENTS ( EVENT_ID, MACHINE_ID, MACHINE_TYPE, EVENT_TIMESTAMP, AI...]
+[2026-04-04T02:38:29.357+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:29.362+0000] {cursor.py:1028} INFO - query: [COMMIT]
+[2026-04-04T02:38:29.460+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:29.465+0000] {cursor.py:1205} INFO - Number of results in first chunk: 1
+[2026-04-04T02:38:29.467+0000] {loader.py:130} INFO - ✅ Inserted 100 valid events (batch: 76ea2988...)
+[2026-04-04T02:38:29.642+0000] {cursor.py:1028} INFO - query: [INSERT INTO IOT_EVENTS ( EVENT_ID, MACHINE_ID, MACHINE_TYPE, EVENT_TIMESTAMP, AI...]
+[2026-04-04T02:38:30.180+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:30.182+0000] {cursor.py:1028} INFO - query: [COMMIT]
+[2026-04-04T02:38:30.261+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:30.269+0000] {cursor.py:1205} INFO - Number of results in first chunk: 1
+[2026-04-04T02:38:30.271+0000] {loader.py:130} INFO - ✅ Inserted 63 valid events (batch: 76ea2988...)
+[2026-04-04T02:38:30.273+0000] {cursor.py:1028} INFO - query: [INSERT INTO IOT_EVENTS_REJECTED ( EVENT_ID, MACHINE_ID, RAW_PAYLOAD, ERROR_CODE,...]
+[2026-04-04T02:38:30.722+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:30.730+0000] {cursor.py:1028} INFO - query: [INSERT INTO IOT_EVENTS_REJECTED ( EVENT_ID, MACHINE_ID, RAW_PAYLOAD, ERROR_CODE,...]
+[2026-04-04T02:38:31.166+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:31.171+0000] {cursor.py:1028} INFO - query: [INSERT INTO IOT_EVENTS_REJECTED ( EVENT_ID, MACHINE_ID, RAW_PAYLOAD, ERROR_CODE,...]
+[2026-04-04T02:38:31.725+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:31.726+0000] {cursor.py:1028} INFO - query: [INSERT INTO IOT_EVENTS_REJECTED ( EVENT_ID, MACHINE_ID, RAW_PAYLOAD, ERROR_CODE,...]
+[2026-04-04T02:38:32.021+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:32.025+0000] {cursor.py:1028} INFO - query: [INSERT INTO IOT_EVENTS_REJECTED ( EVENT_ID, MACHINE_ID, RAW_PAYLOAD, ERROR_CODE,...]
+[2026-04-04T02:38:32.520+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:32.524+0000] {cursor.py:1028} INFO - query: [INSERT INTO IOT_EVENTS_REJECTED ( EVENT_ID, MACHINE_ID, RAW_PAYLOAD, ERROR_CODE,...]
+[2026-04-04T02:38:32.800+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:32.802+0000] {cursor.py:1028} INFO - query: [INSERT INTO IOT_EVENTS_REJECTED ( EVENT_ID, MACHINE_ID, RAW_PAYLOAD, ERROR_CODE,...]
+[2026-04-04T02:38:33.055+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:33.057+0000] {cursor.py:1028} INFO - query: [INSERT INTO IOT_EVENTS_REJECTED ( EVENT_ID, MACHINE_ID, RAW_PAYLOAD, ERROR_CODE,...]
+[2026-04-04T02:38:33.359+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:33.361+0000] {cursor.py:1028} INFO - query: [INSERT INTO IOT_EVENTS_REJECTED ( EVENT_ID, MACHINE_ID, RAW_PAYLOAD, ERROR_CODE,...]
+[2026-04-04T02:38:33.732+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:33.734+0000] {cursor.py:1028} INFO - query: [INSERT INTO IOT_EVENTS_REJECTED ( EVENT_ID, MACHINE_ID, RAW_PAYLOAD, ERROR_CODE,...]
+[2026-04-04T02:38:34.018+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:34.020+0000] {cursor.py:1028} INFO - query: [INSERT INTO IOT_EVENTS_REJECTED ( EVENT_ID, MACHINE_ID, RAW_PAYLOAD, ERROR_CODE,...]
+[2026-04-04T02:38:34.325+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:34.334+0000] {cursor.py:1028} INFO - query: [INSERT INTO IOT_EVENTS_REJECTED ( EVENT_ID, MACHINE_ID, RAW_PAYLOAD, ERROR_CODE,...]
+[2026-04-04T02:38:34.667+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:34.680+0000] {cursor.py:1028} INFO - query: [INSERT INTO IOT_EVENTS_REJECTED ( EVENT_ID, MACHINE_ID, RAW_PAYLOAD, ERROR_CODE,...]
+[2026-04-04T02:38:35.062+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:35.063+0000] {cursor.py:1028} INFO - query: [INSERT INTO IOT_EVENTS_REJECTED ( EVENT_ID, MACHINE_ID, RAW_PAYLOAD, ERROR_CODE,...]
+[2026-04-04T02:38:35.347+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:35.350+0000] {cursor.py:1028} INFO - query: [INSERT INTO IOT_EVENTS_REJECTED ( EVENT_ID, MACHINE_ID, RAW_PAYLOAD, ERROR_CODE,...]
+[2026-04-04T02:38:35.647+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:35.652+0000] {cursor.py:1028} INFO - query: [INSERT INTO IOT_EVENTS_REJECTED ( EVENT_ID, MACHINE_ID, RAW_PAYLOAD, ERROR_CODE,...]
+[2026-04-04T02:38:35.999+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:36.045+0000] {cursor.py:1028} INFO - query: [INSERT INTO IOT_EVENTS_REJECTED ( EVENT_ID, MACHINE_ID, RAW_PAYLOAD, ERROR_CODE,...]
+[2026-04-04T02:38:36.417+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:36.432+0000] {cursor.py:1028} INFO - query: [INSERT INTO IOT_EVENTS_REJECTED ( EVENT_ID, MACHINE_ID, RAW_PAYLOAD, ERROR_CODE,...]
+[2026-04-04T02:38:36.726+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:36.734+0000] {cursor.py:1028} INFO - query: [INSERT INTO IOT_EVENTS_REJECTED ( EVENT_ID, MACHINE_ID, RAW_PAYLOAD, ERROR_CODE,...]
+[2026-04-04T02:38:37.084+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:37.086+0000] {cursor.py:1028} INFO - query: [INSERT INTO IOT_EVENTS_REJECTED ( EVENT_ID, MACHINE_ID, RAW_PAYLOAD, ERROR_CODE,...]
+[2026-04-04T02:38:37.576+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:37.639+0000] {cursor.py:1028} INFO - query: [INSERT INTO IOT_EVENTS_REJECTED ( EVENT_ID, MACHINE_ID, RAW_PAYLOAD, ERROR_CODE,...]
+[2026-04-04T02:38:38.117+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:38.140+0000] {cursor.py:1028} INFO - query: [INSERT INTO IOT_EVENTS_REJECTED ( EVENT_ID, MACHINE_ID, RAW_PAYLOAD, ERROR_CODE,...]
+[2026-04-04T02:38:38.496+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:38.521+0000] {cursor.py:1028} INFO - query: [INSERT INTO IOT_EVENTS_REJECTED ( EVENT_ID, MACHINE_ID, RAW_PAYLOAD, ERROR_CODE,...]
+[2026-04-04T02:38:39.062+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:39.198+0000] {cursor.py:1028} INFO - query: [INSERT INTO IOT_EVENTS_REJECTED ( EVENT_ID, MACHINE_ID, RAW_PAYLOAD, ERROR_CODE,...]
+[2026-04-04T02:38:39.615+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:39.629+0000] {cursor.py:1028} INFO - query: [INSERT INTO IOT_EVENTS_REJECTED ( EVENT_ID, MACHINE_ID, RAW_PAYLOAD, ERROR_CODE,...]
+[2026-04-04T02:38:40.110+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:40.134+0000] {cursor.py:1028} INFO - query: [INSERT INTO IOT_EVENTS_REJECTED ( EVENT_ID, MACHINE_ID, RAW_PAYLOAD, ERROR_CODE,...]
+[2026-04-04T02:38:40.527+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:40.529+0000] {cursor.py:1028} INFO - query: [INSERT INTO IOT_EVENTS_REJECTED ( EVENT_ID, MACHINE_ID, RAW_PAYLOAD, ERROR_CODE,...]
+[2026-04-04T02:38:40.960+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:41.000+0000] {cursor.py:1028} INFO - query: [INSERT INTO IOT_EVENTS_REJECTED ( EVENT_ID, MACHINE_ID, RAW_PAYLOAD, ERROR_CODE,...]
+[2026-04-04T02:38:41.315+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:41.317+0000] {cursor.py:1028} INFO - query: [INSERT INTO IOT_EVENTS_REJECTED ( EVENT_ID, MACHINE_ID, RAW_PAYLOAD, ERROR_CODE,...]
+[2026-04-04T02:38:41.654+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:41.682+0000] {cursor.py:1028} INFO - query: [INSERT INTO IOT_EVENTS_REJECTED ( EVENT_ID, MACHINE_ID, RAW_PAYLOAD, ERROR_CODE,...]
+[2026-04-04T02:38:42.110+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:42.129+0000] {cursor.py:1028} INFO - query: [INSERT INTO IOT_EVENTS_REJECTED ( EVENT_ID, MACHINE_ID, RAW_PAYLOAD, ERROR_CODE,...]
+[2026-04-04T02:38:42.581+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:42.594+0000] {cursor.py:1028} INFO - query: [INSERT INTO IOT_EVENTS_REJECTED ( EVENT_ID, MACHINE_ID, RAW_PAYLOAD, ERROR_CODE,...]
+[2026-04-04T02:38:42.993+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:43.029+0000] {cursor.py:1028} INFO - query: [INSERT INTO IOT_EVENTS_REJECTED ( EVENT_ID, MACHINE_ID, RAW_PAYLOAD, ERROR_CODE,...]
+[2026-04-04T02:38:43.356+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:43.369+0000] {cursor.py:1028} INFO - query: [INSERT INTO IOT_EVENTS_REJECTED ( EVENT_ID, MACHINE_ID, RAW_PAYLOAD, ERROR_CODE,...]
+[2026-04-04T02:38:44.137+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:44.215+0000] {cursor.py:1028} INFO - query: [INSERT INTO IOT_EVENTS_REJECTED ( EVENT_ID, MACHINE_ID, RAW_PAYLOAD, ERROR_CODE,...]
+[2026-04-04T02:38:45.048+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:45.128+0000] {cursor.py:1028} INFO - query: [INSERT INTO IOT_EVENTS_REJECTED ( EVENT_ID, MACHINE_ID, RAW_PAYLOAD, ERROR_CODE,...]
+[2026-04-04T02:38:45.609+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:45.621+0000] {cursor.py:1028} INFO - query: [INSERT INTO IOT_EVENTS_REJECTED ( EVENT_ID, MACHINE_ID, RAW_PAYLOAD, ERROR_CODE,...]
+[2026-04-04T02:38:45.945+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:45.948+0000] {cursor.py:1028} INFO - query: [COMMIT]
+[2026-04-04T02:38:46.093+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:38:46.098+0000] {cursor.py:1205} INFO - Number of results in first chunk: 1
+[2026-04-04T02:38:46.102+0000] {loader.py:183} INFO - ⚠️  Inserted 37 rejected events (batch: 76ea2988...)
+[2026-04-04T02:38:46.104+0000] {connection.py:718} INFO - closed
+[2026-04-04T02:38:46.210+0000] {connection.py:724} INFO - No async queries seem to be running, deleting session
+[2026-04-04T02:38:46.300+0000] {loader.py:56} INFO - Snowflake connection closed
+[2026-04-04T02:38:49.563+0000] {base.py:1130} INFO - Stopping heartbeat thread
+[2026-04-04T02:38:49.572+0000] {base.py:943} INFO - Leaving consumer group ***-pipeline-group (member kafka-python-2.3.0-6bec39f8-ed13-4b36-bd28-ac9b3601b331).
+[2026-04-04T02:38:50.152+0000] {base.py:961} INFO - LeaveGroup request for group ***-pipeline-group returned successfully
+[2026-04-04T02:38:50.154+0000] {conn.py:951} INFO - <BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:29092 <connected> [IPv4 ('172.18.0.3', 29092)]>: Closing connection. 
+[2026-04-04T02:38:50.160+0000] {conn.py:951} INFO - <BrokerConnection client_id=kafka-python-2.3.0, node_id=coordinator-1 host=kafka:29092 <connected> [IPv4 ('172.18.0.3', 29092)]>: Closing connection. 
+[2026-04-04T02:38:50.164+0000] {iot_pipeline_dag.py:196} INFO - ✅ Consume complete — consumed: 500 | valid: 463 | rejected: 37 | rate: 15.2/sec
+[2026-04-04T02:38:50.286+0000] {python.py:201} INFO - Done. Returned value was: {'batch_id': '76ea2988-3e98-4bf7-b74f-d21123ce2cd5', 'total_consumed': 500, 'total_valid': 463, 'total_rejected': 37, 'records_per_sec': 15.19, 'elapsed_sec': 32.91}
+[2026-04-04T02:38:50.605+0000] {taskinstance.py:1138} INFO - Marking task as SUCCESS. dag_id=iot_streaming_pipeline, task_id=consume_and_load, execution_date=20260404T023000, start_date=20260404T023744, end_date=20260404T023850
+[2026-04-04T02:38:50.829+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 0
+[2026-04-04T02:38:51.003+0000] {taskinstance.py:3280} INFO - 1 downstream tasks scheduled from follow-on schedule check

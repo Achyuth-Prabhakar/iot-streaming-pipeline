@@ -1,0 +1,28 @@
+[2026-04-04T02:43:00.782+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: iot_streaming_pipeline.health_check scheduled__2026-04-04T02:35:00+00:00 [queued]>
+[2026-04-04T02:43:00.797+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: iot_streaming_pipeline.health_check scheduled__2026-04-04T02:35:00+00:00 [queued]>
+[2026-04-04T02:43:00.798+0000] {taskinstance.py:2170} INFO - Starting attempt 1 of 3
+[2026-04-04T02:43:00.827+0000] {taskinstance.py:2191} INFO - Executing <Task(PythonOperator): health_check> on 2026-04-04 02:35:00+00:00
+[2026-04-04T02:43:00.839+0000] {standard_task_runner.py:60} INFO - Started process 2528 to run task
+[2026-04-04T02:43:00.845+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'iot_streaming_pipeline', 'health_check', 'scheduled__2026-04-04T02:35:00+00:00', '--job-id', '102', '--raw', '--subdir', 'DAGS_FOLDER/iot_pipeline_dag.py', '--cfg-path', '/tmp/tmpqqrwsfkx']
+[2026-04-04T02:43:00.850+0000] {standard_task_runner.py:88} INFO - Job 102: Subtask health_check
+[2026-04-04T02:43:00.999+0000] {task_command.py:423} INFO - Running <TaskInstance: iot_streaming_pipeline.health_check scheduled__2026-04-04T02:35:00+00:00 [running]> on host e1f63ebd2327
+[2026-04-04T02:43:01.197+0000] {taskinstance.py:2480} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='achyuth' AIRFLOW_CTX_DAG_ID='iot_streaming_pipeline' AIRFLOW_CTX_TASK_ID='health_check' AIRFLOW_CTX_EXECUTION_DATE='2026-04-04T02:35:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2026-04-04T02:35:00+00:00'
+[2026-04-04T02:43:02.440+0000] {conn.py:400} INFO - <BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:29092 <connecting> [IPv4 ('172.18.0.3', 29092)]>: connecting to kafka:29092 [('172.18.0.3', 29092) IPv4]
+[2026-04-04T02:43:02.446+0000] {conn.py:622} INFO - <BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:29092 <checking_api_versions_recv> [IPv4 ('172.18.0.3', 29092)]>: Broker version identified as 2.6
+[2026-04-04T02:43:02.447+0000] {conn.py:461} INFO - <BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:29092 <connected> [IPv4 ('172.18.0.3', 29092)]>: Connection complete.
+[2026-04-04T02:43:02.448+0000] {consumer.py:131} WARNING - group_id is None: disabling auto-commit.
+[2026-04-04T02:43:02.452+0000] {conn.py:951} INFO - <BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:29092 <connected> [IPv4 ('172.18.0.3', 29092)]>: Closing connection. 
+[2026-04-04T02:43:02.453+0000] {iot_pipeline_dag.py:66} INFO - ✅ Kafka healthy — topics visible: 1
+[2026-04-04T02:43:02.453+0000] {connection.py:370} INFO - Snowflake Connector for Python Version: 3.6.0, Python Version: 3.11.8, Platform: Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.36
+[2026-04-04T02:43:02.454+0000] {connection.py:1171} INFO - This connection is in OCSP Fail Open Mode. TLS Certificates would be checked for validity and revocation status. Any other Certificate Revocation related exceptions or OCSP Responder failures would be disregarded in favor of connectivity.
+[2026-04-04T02:43:03.148+0000] {cursor.py:1028} INFO - query: [SELECT 1]
+[2026-04-04T02:43:03.228+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-04T02:43:03.230+0000] {cursor.py:1205} INFO - Number of results in first chunk: 1
+[2026-04-04T02:43:03.234+0000] {connection.py:718} INFO - closed
+[2026-04-04T02:43:03.282+0000] {connection.py:724} INFO - No async queries seem to be running, deleting session
+[2026-04-04T02:43:03.332+0000] {iot_pipeline_dag.py:85} INFO - ✅ Snowflake healthy
+[2026-04-04T02:43:03.369+0000] {iot_pipeline_dag.py:95} INFO - ✅ Health check passed — batch_id: cd89b22a-724d-4941-ae6c-513236e49862
+[2026-04-04T02:43:03.374+0000] {python.py:201} INFO - Done. Returned value was: cd89b22a-724d-4941-ae6c-513236e49862
+[2026-04-04T02:43:03.421+0000] {taskinstance.py:1138} INFO - Marking task as SUCCESS. dag_id=iot_streaming_pipeline, task_id=health_check, execution_date=20260404T023500, start_date=20260404T024300, end_date=20260404T024303
+[2026-04-04T02:43:03.507+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 0
+[2026-04-04T02:43:03.556+0000] {taskinstance.py:3280} INFO - 1 downstream tasks scheduled from follow-on schedule check

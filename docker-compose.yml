@@ -1,0 +1,182 @@
+version: '3.8'
+
+x-airflow-common: &airflow-common
+  image: apache/airflow:2.8.1-python3.11
+  environment: &airflow-common-env
+    AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+    AIRFLOW__CORE__FERNET_KEY: 'ZmDfcTF7_60GrrY167zsiPd67pEvs0aGOv2oasOM1Pg='
+    AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
+    AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+    AIRFLOW__API__AUTH_BACKENDS: 'airflow.api.auth.backend.basic_auth'
+    _PIP_ADDITIONAL_REQUIREMENTS: 'snowflake-connector-python kafka-python pandas pyyaml'
+    SNOWFLAKE_ACCOUNT: iewaemw-fc94643
+    SNOWFLAKE_USER: aemidi
+    SNOWFLAKE_PASSWORD: W@rmachineRoxx28
+    SNOWFLAKE_WAREHOUSE: COMPUTE_WH
+    SNOWFLAKE_DATABASE: IOT_PIPELINE_DB
+    SNOWFLAKE_SCHEMA: RAW
+    SNOWFLAKE_ROLE: ACCOUNTADMIN
+  volumes:
+    - ./airflow/dags:/opt/airflow/dags
+    - ./airflow/logs:/opt/airflow/logs
+    - ./airflow/plugins:/opt/airflow/plugins
+    - ./consumer:/opt/airflow/consumer
+    - ./config:/opt/airflow/config
+  user: "${AIRFLOW_UID:-50000}:0"
+  depends_on: &airflow-depends-on
+    postgres:
+      condition: service_healthy
+
+services:
+
+  # ── 1. Kafka (KRaft mode — no Zookeeper) ────────────────────────────────────
+  kafka:
+    image: confluentinc/cp-kafka:7.6.1        # 7.6.x = Kafka 3.6 under the hood, full KRaft support
+    container_name: kafka
+    ports:
+      - "9092:9092"    # external access from your local machine
+      - "9101:9101"    # JMX metrics
+    environment:
+      # ── KRaft identity ─────────────────────────────────────────────────────
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: 'broker,controller'        # single node acts as both
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka:29093' # node 1 is the only voter
+
+      # ── Listeners ──────────────────────────────────────────────────────────
+      # Three listeners:
+      #   PLAINTEXT      → internal Docker network (other containers use this)
+      #   PLAINTEXT_HOST → your local machine (localhost:9092)
+      #   CONTROLLER     → KRaft controller communication (internal only)
+      KAFKA_LISTENERS: 'PLAINTEXT://kafka:29092,PLAINTEXT_HOST://0.0.0.0:9092,CONTROLLER://kafka:29093'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
+      KAFKA_INTER_BROKER_LISTENER_NAME: 'PLAINTEXT'
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+
+      # ── KRaft cluster ID (must be base64 encoded, exactly 22 chars) ────────
+      CLUSTER_ID: 'MkU3OEVBNTcwNTJENDM2Qk'
+
+      # ── Broker settings ─────────────────────────────────────────────────────
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_LOG_RETENTION_HOURS: 24
+      KAFKA_NUM_PARTITIONS: 3                 # 3 partitions for our topic (1 per machine group)
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 1
+      KAFKA_JMX_PORT: 9101
+      KAFKA_JMX_HOSTNAME: localhost
+    volumes:
+      - kafka-data:/var/lib/kafka/data        # persist Kafka logs between restarts
+    healthcheck:
+      test: ["CMD", "kafka-topics", "--bootstrap-server", "localhost:9092", "--list"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
+
+  # ── 2. Kafka UI ──────────────────────────────────────────────────────────────
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    depends_on:
+      kafka:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local-iot-cluster
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
+      # No Zookeeper entry needed — KRaft doesn't use it
+
+  # ── 3. PostgreSQL (Airflow metadata) ────────────────────────────────────────
+  postgres:
+    image: postgres:15
+    container_name: airflow-postgres
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "airflow"]
+      interval: 10s
+      retries: 5
+      start_period: 5s
+    restart: always
+
+  # ── 4. Airflow Init ──────────────────────────────────────────────────────────
+  airflow-init:
+    <<: *airflow-common
+    container_name: airflow-init
+    entrypoint: /bin/bash
+    command:
+      - -c
+      - |
+        export PATH=/home/airflow/.local/bin:$$PATH
+        airflow db migrate
+        airflow users create \
+          --username ${_AIRFLOW_WWW_USER_USERNAME:-admin} \
+          --password ${_AIRFLOW_WWW_USER_PASSWORD:-admin123} \
+          --firstname Achyuth \
+          --lastname Admin \
+          --role Admin \
+          --email admin@example.com
+        echo "Airflow initialized successfully"
+    environment:
+      <<: *airflow-common-env
+      _AIRFLOW_DB_MIGRATE: 'true'
+    user: "50000:0"
+
+  # ── 5. Airflow Webserver ─────────────────────────────────────────────────────
+  airflow-webserver:
+    <<: *airflow-common
+    container_name: airflow-webserver
+    command: webserver
+    ports:
+      - "8081:8080"
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 45s
+    restart: always
+    depends_on:
+      <<: *airflow-depends-on
+      airflow-init:
+        condition: service_completed_successfully
+
+  # ── 6. Airflow Scheduler ─────────────────────────────────────────────────────
+  airflow-scheduler:
+    <<: *airflow-common
+    container_name: airflow-scheduler
+    command: scheduler
+    restart: always
+    depends_on:
+      <<: *airflow-depends-on
+      airflow-init:
+        condition: service_completed_successfully
+
+  # ── 7. IoT Producer ──────────────────────────────────────────────────────────
+  iot-producer:
+    build:
+      context: ./producer
+      dockerfile: Dockerfile
+    container_name: iot-producer
+    depends_on:
+      kafka:
+        condition: service_healthy
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      KAFKA_TOPIC: iot-sensor-events
+      RECORDS_PER_SECOND: 6
+    volumes:
+      - ./data:/app/data
+    restart: on-failure
+
+volumes:
+  postgres-data:
+  kafka-data:

@@ -1,0 +1,40 @@
+[2026-04-03T12:40:27.214+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: iot_streaming_pipeline.data_quality_report scheduled__2026-04-03T12:20:00+00:00 [queued]>
+[2026-04-03T12:40:27.306+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: iot_streaming_pipeline.data_quality_report scheduled__2026-04-03T12:20:00+00:00 [queued]>
+[2026-04-03T12:40:27.348+0000] {taskinstance.py:2170} INFO - Starting attempt 1 of 3
+[2026-04-03T12:40:27.540+0000] {taskinstance.py:2191} INFO - Executing <Task(PythonOperator): data_quality_report> on 2026-04-03 12:20:00+00:00
+[2026-04-03T12:40:27.666+0000] {standard_task_runner.py:60} INFO - Started process 591 to run task
+[2026-04-03T12:40:27.792+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'iot_streaming_pipeline', 'data_quality_report', 'scheduled__2026-04-03T12:20:00+00:00', '--job-id', '76', '--raw', '--subdir', 'DAGS_FOLDER/iot_pipeline_dag.py', '--cfg-path', '/tmp/tmp0_m2t1wx']
+[2026-04-03T12:40:27.817+0000] {standard_task_runner.py:88} INFO - Job 76: Subtask data_quality_report
+[2026-04-03T12:40:28.326+0000] {task_command.py:423} INFO - Running <TaskInstance: iot_streaming_pipeline.data_quality_report scheduled__2026-04-03T12:20:00+00:00 [running]> on host e1f63ebd2327
+[2026-04-03T12:40:28.815+0000] {taskinstance.py:2480} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='achyuth' AIRFLOW_CTX_DAG_ID='iot_streaming_pipeline' AIRFLOW_CTX_TASK_ID='data_quality_report' AIRFLOW_CTX_EXECUTION_DATE='2026-04-03T12:20:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2026-04-03T12:20:00+00:00'
+[2026-04-03T12:40:31.362+0000] {connection.py:370} INFO - Snowflake Connector for Python Version: 3.6.0, Python Version: 3.11.8, Platform: Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.36
+[2026-04-03T12:40:31.388+0000] {connection.py:1171} INFO - This connection is in OCSP Fail Open Mode. TLS Certificates would be checked for validity and revocation status. Any other Certificate Revocation related exceptions or OCSP Responder failures would be disregarded in favor of connectivity.
+[2026-04-03T12:40:32.453+0000] {cursor.py:1028} INFO - query: [SELECT SUM(TOTAL_CONSUMED)                                        AS total_consu...]
+[2026-04-03T12:40:32.764+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-03T12:40:32.831+0000] {cursor.py:1205} INFO - Number of results in first chunk: 1
+[2026-04-03T12:40:33.018+0000] {iot_pipeline_dag.py:271} INFO - =======================================================
+[2026-04-03T12:40:33.107+0000] {iot_pipeline_dag.py:272} INFO - 📊 CUMULATIVE PIPELINE QUALITY REPORT
+[2026-04-03T12:40:33.151+0000] {iot_pipeline_dag.py:273} INFO - =======================================================
+[2026-04-03T12:40:33.158+0000] {iot_pipeline_dag.py:274} INFO -   Total runs         : 4
+[2026-04-03T12:40:33.174+0000] {iot_pipeline_dag.py:275} INFO -   Total consumed     : 2,000
+[2026-04-03T12:40:33.201+0000] {iot_pipeline_dag.py:276} INFO -   Total valid        : 1,839
+[2026-04-03T12:40:33.214+0000] {iot_pipeline_dag.py:277} INFO -   Total rejected     : 161
+[2026-04-03T12:40:33.226+0000] {iot_pipeline_dag.py:278} INFO -   Avg valid %%        : 91.95%%
+[2026-04-03T12:40:33.245+0000] {iot_pipeline_dag.py:279} INFO -   Avg rejected %%     : 8.05%%
+[2026-04-03T12:40:33.255+0000] {iot_pipeline_dag.py:280} INFO -   Avg records/sec    : 14.36
+[2026-04-03T12:40:33.259+0000] {iot_pipeline_dag.py:281} INFO - =======================================================
+[2026-04-03T12:40:33.264+0000] {iot_pipeline_dag.py:282} INFO -   ✅ Pipeline maintaining 91.95%% data quality (target: 92%%)
+[2026-04-03T12:40:33.267+0000] {cursor.py:1028} INFO - query: [SELECT COUNT(*) FROM IOT_EVENTS]
+[2026-04-03T12:40:33.475+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-03T12:40:33.492+0000] {cursor.py:1205} INFO - Number of results in first chunk: 1
+[2026-04-03T12:40:33.498+0000] {cursor.py:1028} INFO - query: [SELECT COUNT(*) FROM IOT_EVENTS_REJECTED]
+[2026-04-03T12:40:33.696+0000] {cursor.py:1041} INFO - query execution done
+[2026-04-03T12:40:33.722+0000] {cursor.py:1205} INFO - Number of results in first chunk: 1
+[2026-04-03T12:40:33.774+0000] {iot_pipeline_dag.py:294} INFO -   📦 IOT_EVENTS rows        : 1,839
+[2026-04-03T12:40:33.831+0000] {iot_pipeline_dag.py:295} INFO -   🗑️  IOT_EVENTS_REJECTED rows: 161
+[2026-04-03T12:40:33.857+0000] {connection.py:718} INFO - closed
+[2026-04-03T12:40:33.997+0000] {connection.py:724} INFO - No async queries seem to be running, deleting session
+[2026-04-03T12:40:34.098+0000] {python.py:201} INFO - Done. Returned value was: None
+[2026-04-03T12:40:34.169+0000] {taskinstance.py:1138} INFO - Marking task as SUCCESS. dag_id=iot_streaming_pipeline, task_id=data_quality_report, execution_date=20260403T122000, start_date=20260403T124027, end_date=20260403T124034
+[2026-04-03T12:40:34.553+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 0
+[2026-04-03T12:40:34.693+0000] {taskinstance.py:3280} INFO - 0 downstream tasks scheduled from follow-on schedule check
