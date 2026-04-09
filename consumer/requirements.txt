@@ -3,3 +3,4 @@ snowflake-connector-python
 python-dotenv
 numpy==1.26.4
 pandas==2.2.0
+azure-eventhub==5.11.5

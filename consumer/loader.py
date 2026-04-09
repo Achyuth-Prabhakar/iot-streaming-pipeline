@@ -16,7 +16,7 @@ import snowflake.connector
 from snowflake.connector.errors import DatabaseError
 from dotenv import load_dotenv
 
-load_dotenv(dotenv_path=r'C:\Users\eshae\repos\iot-streaming-pipeline\.env')
+load_dotenv()   
 
 logger = logging.getLogger(__name__)
 
@@ -47,7 +47,7 @@ class SnowflakeLoader:
                 schema    = self.schema,
                 role      = self.role,
             )
-            logger.info("✅ Snowflake connection established")
+            logger.info("Snowflake connection established")
         return self._conn
 
     def close(self):
@@ -71,7 +71,7 @@ class SnowflakeLoader:
                     f"Missing Snowflake tables: {missing}. "
                     f"Run snowflake/schema.sql first."
                 )
-            logger.info(f"✅ All Snowflake tables verified: {required}")
+            logger.info(f"All Snowflake tables verified: {required}")
         finally:
             cur.close()
 
@@ -127,10 +127,10 @@ class SnowflakeLoader:
         try:
             cur.executemany(sql, rows)
             conn.commit()
-            logger.info(f"✅ Inserted {len(rows)} valid events (batch: {batch_id[:8]}...)")
+            logger.info(f"Inserted {len(rows)} valid events (batch: {batch_id[:8]}...)")
             return len(rows)
         except DatabaseError as e:
-            logger.error(f"❌ Failed to insert valid events: {e}")
+            logger.error(f"Failed to insert valid events: {e}")
             conn.rollback()
             raise
         finally:
@@ -183,7 +183,7 @@ class SnowflakeLoader:
             logger.info(f"⚠️  Inserted {len(rows)} rejected events (batch: {batch_id[:8]}...)")
             return len(rows)
         except DatabaseError as e:
-            logger.error(f"❌ Failed to insert rejected events: {e}")
+            logger.error(f"Failed to insert rejected events: {e}")
             conn.rollback()
             raise
         finally:
@@ -230,13 +230,13 @@ class SnowflakeLoader:
             })
             conn.commit()
             logger.info(
-                f"📊 Metrics logged — "
+                f"Metrics logged — "
                 f"consumed: {total_consumed}, "
                 f"valid: {valid_pct}%, "
                 f"rejected: {rejected_pct}%"
             )
         except DatabaseError as e:
-            logger.error(f"❌ Failed to log metrics: {e}")
+            logger.error(f"Failed to log metrics: {e}")
             conn.rollback()
             raise
         finally:

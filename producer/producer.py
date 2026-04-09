@@ -188,7 +188,7 @@ def main():
     last_log_time  = start_time
 
     logger.info(
-        f"🚀 Starting IoT Producer | "
+        f"Starting IoT Producer | "
         f"Rate: {RECORDS_PER_SECOND}/sec | "
         f"Daily target: {RECORDS_PER_SECOND * 86400:,.0f} records | "
         f"Error rate: {ERROR_INJECTION_RATE*100:.0f}%"
@@ -223,7 +223,7 @@ def main():
             error_pct   = (errors_sent / total_sent * 100) if total_sent > 0 else 0
 
             logger.info(
-                f"📊 Sent: {total_sent:,} | "
+                f"Sent: {total_sent:,} | "
                 f"Rate: {rate:.1f}/sec | "
                 f"Daily projection: {daily_proj:,.0f} | "
                 f"Errors injected: {errors_sent:,} ({error_pct:.1f}%)"
