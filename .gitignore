@@ -17,3 +17,7 @@ airflow/logs/
 airflow/plugins/
 data/
 config/
+
+*.yaml
+
+docker-compose.yml
